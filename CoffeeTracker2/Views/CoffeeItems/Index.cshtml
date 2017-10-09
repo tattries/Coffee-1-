@@ -1,0 +1,84 @@
+﻿@model IEnumerable<CoffeeTracker.Models.CoffeeItems>
+
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<div style="text-align:center">
+    <img src="~/images/coffee.jpg" width="100" height="100" />
+    <h2>Coffee Tracker</h2>
+</div>
+
+<b>Select Profile</b>
+
+@using (Html.BeginForm("Index", "CoffeeItems", FormMethod.Get))
+{
+
+    <fieldset>
+
+     
+        @Html.DropDownList("profileId", new SelectList(ViewBag.Profiles, "Id", "FullName"), new { @onchange = "CallChangefunc(this.value)" })
+
+
+</fieldset>
+
+}
+
+<script>
+function CallChangefunc(val)
+{
+  window.location.href="/CoffeeItems?profileId="+val;
+}
+</script>
+
+<br />
+<hr />
+
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CreationDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CoffeeType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CoffeeSize)
+                </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreationDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CoffeeType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CoffeeSize)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id" asp-route-profileId="@item.ProfileId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<p>
+    <a asp-action="Create" asp-route-profileId=@ViewBag.ProfileId>Add Coffee</a>
+</p>
